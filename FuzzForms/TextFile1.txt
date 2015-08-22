@@ -1,0 +1,5 @@
+﻿TO DO
+
+ADD REDUCE (using lithium's algorithm)
+ADD KNOWN ISSUES CHECKING
+ADD AUTO RIASE
