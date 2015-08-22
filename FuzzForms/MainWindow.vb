@@ -85,7 +85,7 @@ Public Class MainWindow
 
     Private Sub btnStop_Click(sender As Object, e As EventArgs) Handles btnStop.Click
         t.Abort()
-
+        chkKeepGoing.Checked = False
         MsgBox("Test stopped")
     End Sub
 

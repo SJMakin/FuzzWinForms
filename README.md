@@ -3,9 +3,9 @@
 
 ####Features:
 
-Random input of x number of actions using User32 api
+Random input of x number of actions using User32 API
 
-Each input has a configurable chance of occuring
+Each input has a configurable chance of occurring
   * Mouse click events
     - Left click
     - Right click
@@ -21,7 +21,9 @@ Replay minimizer based on Lithium (most replays go down to <10 actions)
 
 Application Event log capture with filters
 
-Interuption detection, so it doesnt take control over your session
+Interruption detection, so it doesn't take control over your session
+
+Pre/Post-Test actions, so you can (restore databases/config files/etc to) ensure a consistent test  
 
 #### TO DO:
 
