@@ -74,7 +74,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Lithium.vb" />
-    <Compile Include="SendInput.vb" />
     <Compile Include="TestWindow.vb" />
     <Compile Include="WindowHelper.vb" />
     <Compile Include="MainWindow.vb">
