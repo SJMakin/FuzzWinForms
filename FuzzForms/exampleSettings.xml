@@ -16,7 +16,7 @@
     <string>Exception</string>
     <string>Error</string>
     <string>System.</string>
-	</eventLogFilterInclude>
+  </eventLogFilterInclude>
   <eventLogFilterExclude />
   <rMouseMove>20</rMouseMove>
   <rMouseClickLeft>30</rMouseClickLeft>
