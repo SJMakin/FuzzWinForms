@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TestWindow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <startTimeOut>5000</startTimeOut>
+  <iterationTimeOut>1024</iterationTimeOut>
+  <delayBetweenActions>100</delayBetweenActions>
+  <recordImages>false</recordImages>
+  <windowTitleSize>35</windowTitleSize>
+  <windowEdges>9</windowEdges>
+  <preTestActions>
+    <string>RD "%APPDATA%\MyApp" /S /Q</string>
+    <string>REG DELETE HKCU\Software\MyApp /F</string>
+    <string>SqlCmd -E -S SQLSERVER "RESTORE DATABASE [MyApp] FROM DISK='D:\BackupsMyDB.bak'"</string>
+  </preTestActions>
+  <postTestActions />
+  <eventLogFilterInclude>
+    <string>Exception</string>
+    <string>Error</string>
+    <string>System.</string>
+	</eventLogFilterInclude>
+  <eventLogFilterExclude />
+  <rMouseMove>20</rMouseMove>
+  <rMouseClickLeft>30</rMouseClickLeft>
+  <rMouseClickRight>40</rMouseClickRight>
+  <rMouseClickMiddle>41</rMouseClickMiddle>
+  <rMouseClickAndDrag>50</rMouseClickAndDrag>
+  <rKeyBoardSpam>96</rKeyBoardSpam>
+  <rNaughtyString>98</rNaughtyString>
+  <rKeyBoardAction>100</rKeyBoardAction>
+  <rKeyBoardFunctionKey>101</rKeyBoardFunctionKey>
+  <keyboardModifierPercent>10</keyboardModifierPercent>
+</TestWindow>
