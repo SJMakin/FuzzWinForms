@@ -32,4 +32,4 @@ Distance comparison on errors, so the minimizer will work if the error doesnt ma
 * Add a log file reader class and add it to data collected during the test
 * Add a db of previously seen error
 * Further automate the workflow
-
+* Add email option to raise errors in support system
