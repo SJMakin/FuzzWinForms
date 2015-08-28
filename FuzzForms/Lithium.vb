@@ -197,7 +197,7 @@ Public Class Lithium
 
         tw.ReplayTest(tempParts.ToArray)
 
-        If tw.eventLogs.Trim = InterestingError.Trim Then Return True
+        If LevenshteinDistance.Compute(tw.eventLogs.Trim, InterestingError.Trim) <= tw.eventLogMatchDistance Then Return True
 
         Return False
 

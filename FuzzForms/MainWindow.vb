@@ -45,11 +45,12 @@ Public Class MainWindow
 
     Public Sub HandleReplayComplete()
         RemoveHandler tw.ReplayComplete, AddressOf HandleReplayComplete
+        Dim errorSimilarity As Integer = LevenshteinDistance.Compute(tw.eventLogs.Trim, InterestingError.Trim)
 
-        If tw.eventLogs.Trim = InterestingError.Trim Then
-            MsgBox("Error reproduced- Expecting error:" & vbNewLine & InterestingError)
+        If errorSimilarity <= tw.eventLogMatchDistance Then
+            MsgBox("Error reproduced")
         Else
-            MsgBox("Error NOT reproduced - Expecting error:" & vbNewLine & InterestingError & vbNewLine & "EventLogs contained: " & tw.eventLogs)
+            MsgBox("Error NOT reproduced - It was " & errorSimilarity & " different - Expecting error:" & vbNewLine & InterestingError & vbNewLine & "EventLogs contained: " & tw.eventLogs)
         End If
 
     End Sub

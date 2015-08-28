@@ -30,6 +30,8 @@ Public Class TestWindow
 
     Public Property eventLogFilterInclude As New List(Of String)
     Public Property eventLogFilterExclude As New List(Of String)
+    Public Property eventLogMatchDistance As Integer = 5
+
     'Outs
     <XmlIgnoreAttribute()> Public Property eventLogs As String = String.Empty
     <XmlIgnoreAttribute()> Public Property replayLog As String = String.Empty
