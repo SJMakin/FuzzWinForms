@@ -25,9 +25,11 @@ Interruption detection, so it doesn't take control over your session
 
 Pre/Post-Test actions, so you can (restore databases/config files/etc to) ensure a consistent test  
 
+Distance comparison on errors, so the minimizer will work if the error doesnt match 100%
+
 #### TO DO:
 
 * Add a log file reader class and add it to data collected during the test
 * Add a db of previously seen error
 * Further automate the workflow
-* Add something to remove any datetimes from collected errors (else the replay (minimizer) wont match the errors - false negative)
+
