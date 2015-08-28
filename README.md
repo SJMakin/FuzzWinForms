@@ -12,7 +12,7 @@ Each input has a configurable chance of occurring
     - Middle Click
     - Click and Drag
   * Keyboard events
-    - Most keys on keyboard with chance of modifiers being active (SHIFT/CTRL/ATL)
+    - Most keys on keyboard with chance of modifiers being active (SHIFT/CTRL/ALT)
     - A dictionary of 'evil' strings which it may use
 
 Action recording and replay functionality
