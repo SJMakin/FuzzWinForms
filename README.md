@@ -27,6 +27,8 @@ Pre/Post-Test actions, so you can (restore databases/config files/etc to) ensure
 
 Distance comparison on errors, so the minimizer will work if the error doesnt match 100%
 
+Warning:  This tool has no idea what it is doing - and does a lot - so use it at your own risk, preferably in a snapshotted VM with no network connectivity.  
+
 #### TO DO:
 
 * Add a log file reader class and add it to data collected during the test
