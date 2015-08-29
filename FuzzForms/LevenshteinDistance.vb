@@ -17,17 +17,15 @@
         Dim d As Integer(,) = New Integer(n, m) {}
 
         ' initialize the top and right of the table to 0, 1, 2, ...
-        Dim i As Integer = 0
-        While i <= n
+        Dim a As Integer = 0
+        While a <= n
 
 
-            d(i, 0) = System.Math.Max(System.Threading.Interlocked.Increment(i), i - 1)
+            d(a, 0) = System.Math.Max(System.Threading.Interlocked.Increment(a), a - 1)
         End While
-        Dim j As Integer = 1
-        While j <= m
-
-
-            d(0, j) = System.Math.Max(System.Threading.Interlocked.Increment(j), j - 1)
+        Dim b As Integer = 1
+        While b <= m
+            d(0, b) = System.Math.Max(System.Threading.Interlocked.Increment(b), b - 1)
         End While
 
         For i As Integer = 1 To n
