@@ -409,6 +409,10 @@ Public Class TestWindow
             Dim randomAction As Integer = newRandomNumber(1, ActionKeys.Length) - 1
             winHelper.SendKey(ActionKeys(randomAction))
             replayLog += "SENDACTIONKEY " & ActionKeys(randomAction) & vbNewLine
+        ElseIf rKeyBoardFunctionKey > r Then
+            Dim randomFunction As Integer = newRandomNumber(1, FunctionKeys.Length) - 1
+            winHelper.SendKey(FunctionKeys(randomFunction))
+            replayLog += "SENDKEY " & FunctionKeys(randomFunction) & vbNewLine
         End If
     End Sub
 
