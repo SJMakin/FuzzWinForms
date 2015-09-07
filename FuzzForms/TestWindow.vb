@@ -11,7 +11,7 @@ Public Enum TestWindowExitCode
     ProcessExit = 2
     StrayOffScreen = 3
     FatalError = 4
-    Interupt = 5
+    Interrupt = 5
 End Enum
 
 Public Class TestWindow
@@ -419,9 +419,9 @@ Public Class TestWindow
     Function ProblemsFound() As Boolean
         Dim lastinputtime As Integer = winHelper.GetLastInputTime
         If lastinputtime <= delayBetweenActions / 2 Then
-            MsgBox("Interupt")
-            replayLog += "Interupt"
-            exitCode = TestWindowExitCode.Interupt
+            ' MsgBox("Interrupt")
+            replayLog += "Interrupt"
+            exitCode = TestWindowExitCode.Interrupt
             Return True
         End If
         Dim newCurrentWindowText = winHelper.fGetWindowText(currentHwnd)
