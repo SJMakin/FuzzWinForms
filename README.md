@@ -35,3 +35,5 @@ Warning:  This tool has no idea what it is doing - and does a lot - so use it at
 * Add a db of previously seen error
 * Further automate the workflow
 * Add email option to raise errors in support system
+
+Inspired by: https://monkeyfuzz.codeplex.com/
