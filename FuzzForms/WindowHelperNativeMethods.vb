@@ -1,6 +1,7 @@
 ﻿Option Strict Off
 
 Imports System.Runtime.InteropServices
+Imports System.Text
 
 Public Class WindowHelperNativeMethods 'Expose and exploit the user32 library
     Private Declare Function EnumWindows Lib "user32" (ByVal lpEnumFunc As CallBack, ByVal lParam As UIntPtr) As UInteger
@@ -442,7 +443,7 @@ Public Class WindowHelperNativeMethods 'Expose and exploit the user32 library
         Dim Input As String = String.Empty
 
         Dim charsToEscape() As Char = "{}+^%~()[]".ToCharArray
-        Dim builder As New Text.StringBuilder()
+        Dim builder As New StringBuilder()
         builder.Append(Input)
 
         'Escape SendInput
