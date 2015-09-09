@@ -15,12 +15,10 @@ Public Class WindowHelperNativeMethods 'Expose and exploit the user32 library
     Private Declare Function GetWindowRect Lib "user32.dll" (ByVal hwnd As IntPtr, ByRef lpRect As RECT) As Int32
     Private Declare Function ShowWindow Lib "user32" (ByVal hwnd As IntPtr, ByVal showCommand As Integer) As Boolean
     Private Declare Function SetForegroundWindow Lib "user32" (ByVal hWnd As IntPtr) As Boolean
-    Private Declare Function GetClassName Lib "user32" Alias "GetClassNameA" (ByVal hwnd As IntPtr, ByVal lpClassName As String, ByVal nMaxCount As Long) As Long
     Private Declare Auto Function SetCursorPos Lib "User32.dll" (ByVal X As Integer, ByVal Y As Integer) As Long
     Private Declare Auto Function GetCursorPos Lib "User32.dll" (ByRef lpPoint As Point) As Long
     Private Declare Function mouse_event Lib "user32" (ByVal dwFlags As Int32, ByVal dX As Int32, ByVal dY As Int32, ByVal cButtons As Int32, ByVal dwExtraInfo As UIntPtr) As Boolean
     Private Declare Function SendInput Lib "user32" (ByVal nInputs As Integer, ByVal pInputs() As INPUT, ByVal cbSize As Integer) As Integer
-    Private Declare Function AttachThreadInput Lib "user32" (ByVal idAttach As IntPtr, ByVal idAttachTo As IntPtr, ByVal fAttach As Boolean) As Boolean
     Private Declare Function GetWindowThreadProcessId Lib "user32" (ByVal hWnd As IntPtr, ByRef lpwdProcessId As Integer) As Integer
     Private Declare Function SetWindowPos Lib "user32.dll" (ByVal hWnd As IntPtr, ByVal hWndInsertAfter As IntPtr, ByVal X As Integer, ByVal Y As Integer, ByVal cx As Integer, ByVal cy As Integer, ByVal uFlags As SetWindowPosFlags) As Boolean
     Private Declare Function GetLastInputInfo Lib "user32.dll" (ByRef plii As LASTINPUTINFO) As Boolean
@@ -526,7 +524,7 @@ Public Class WindowHelperNativeMethods 'Expose and exploit the user32 library
         Return result
     End Function
 
-    Public Function windowIsRelated(ByVal Child As IntPtr, ByVal Parent As IntPtr, ByVal pID As Integer) As Boolean
+    Public Function windowIsRelated(ByVal Child As IntPtr, ByVal Parent As IntPtr) As Boolean
         If GetAncestor(Child, GA_PARENT) = Parent Then Return True
         If GetAncestor(Child, GA_ROOT) = Parent Then Return True
         If GetAncestor(Child, GA_ROOTOWNER) = Parent Then Return True

@@ -1,4 +1,5 @@
-﻿Imports System.IO
+﻿Option Strict On
+Imports System.IO
 Imports System.Xml.Serialization
 
 Public Class Lithium
@@ -46,7 +47,7 @@ Public Class Lithium
                         Exit While
                     Else
                         chunkStart = 0
-                        chunkSize = chunkSize / 2
+                        chunkSize = CInt(chunkSize / 2)
                         Log("Halving chunk size to " & chunkSize.ToString)
 
                     End If
@@ -85,11 +86,11 @@ Public Class Lithium
 
     End Sub
 
-    Function interesting(chunkStart As Integer, chunkSize As Integer, ByVal Optional writeIt As Boolean = True) As Boolean
-        chunkSize = Math.Min(chunkSize, parts.Count - chunkStart)
+    Function interesting(ByVal ichunkStart As Integer, ByVal chunkSize As Integer, Optional ByVal writeIt As Boolean = True) As Boolean
+        chunkSize = Math.Min(chunkSize, parts.Count - ichunkStart)
         Dim oldParts As New List(Of String)
         oldParts.AddRange(parts)  ' would rather be less side-effecty about this, And be passing partsSuggestion around
-        parts.RemoveRange(chunkStart, chunkSize)
+        parts.RemoveRange(ichunkStart, chunkSize)
 
         If writeIt Then writeTestcase(testcaseFileName)
 

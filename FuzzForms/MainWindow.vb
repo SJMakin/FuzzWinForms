@@ -89,24 +89,26 @@ Public Class MainWindow
     End Sub
 
     Private Sub btnFindFile_Click(sender As Object, e As EventArgs) Handles btnFindFile.Click
-        Dim ofd As New OpenFileDialog
-        ofd.Multiselect = False
-        ofd.Filter = "Application files (*.exe)|*.exe|All files (*.*)|*.*"
-        ofd.ShowDialog()
+        Using ofd As New OpenFileDialog
+            ofd.Multiselect = False
+            ofd.Filter = "Application files (*.exe)|*.exe|All files (*.*)|*.*"
+            ofd.ShowDialog()
 
-        txtFileName.Text = ofd.FileName
+            txtFileName.Text = ofd.FileName
+        End Using
     End Sub
 
     Private Sub btnReplay_Click(sender As Object, e As EventArgs) Handles btnReplay.Click
-        Dim ofd As New OpenFileDialog
-        ofd.Multiselect = False
-        ofd.Filter = "Text (*.txt)|*.txt|All files (*.*)|*.*"
+        Using ofd As New OpenFileDialog
+            ofd.Multiselect = False
+            ofd.Filter = "Text (*.txt)|*.txt|All files (*.*)|*.*"
 
-        Dim dr As DialogResult = ofd.ShowDialog()
+            Dim dr As DialogResult = ofd.ShowDialog()
 
-        If dr = DialogResult.OK Then
-            CheckReplay(ofd.FileName)
-        End If
+            If dr = DialogResult.OK Then
+                CheckReplay(ofd.FileName)
+            End If
+        End Using
     End Sub
 
     Public Sub CheckReplay(ByVal filename As String)
@@ -133,45 +135,49 @@ Public Class MainWindow
     Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
         Dim xSer As New XmlSerializer(GetType(TestWindow))
 
-        Dim sfd As New SaveFileDialog
-        sfd.Filter = "XML Files (*.xml)|*.xml|All files (*.*)|*.*"
-        Dim sfdRes As DialogResult = sfd.ShowDialog()
+        Using sfd As New SaveFileDialog
+            sfd.Filter = "XML Files (*.xml)|*.xml|All files (*.*)|*.*"
+            Dim sfdRes As DialogResult = sfd.ShowDialog()
 
-        If sfdRes = DialogResult.OK Then
-            Using writer As New StreamWriter(sfd.FileName)
-                xSer.Serialize(writer, New TestWindow)
-            End Using
-        End If
+            If sfdRes = DialogResult.OK Then
+                Using writer As New StreamWriter(sfd.FileName)
+                    xSer.Serialize(writer, New TestWindow)
+                End Using
+            End If
+        End Using
     End Sub
 
     Private Sub btnLoad_Click(sender As Object, e As EventArgs) Handles btnLoad.Click
         Dim xSer As New XmlSerializer(GetType(TestWindow))
 
-        Dim ofd As New OpenFileDialog
-        ofd.Filter = "XML Files (*.xml)|*.xml|All files (*.*)|*.*"
-        Dim ofdRes As DialogResult = ofd.ShowDialog()
+        Using ofd As New OpenFileDialog
+            ofd.Filter = "XML Files (*.xml)|*.xml|All files (*.*)|*.*"
+            Dim ofdRes As DialogResult = ofd.ShowDialog()
 
-        If ofdRes = DialogResult.OK Then
-            Using reader As New StreamReader(ofd.FileName)
-                tw = DirectCast(xSer.Deserialize(reader), TestWindow)
-            End Using
-        End If
+            If ofdRes = DialogResult.OK Then
+                Using reader As New StreamReader(ofd.FileName)
+                    tw = DirectCast(xSer.Deserialize(reader), TestWindow)
+                End Using
+            End If
+        End Using
     End Sub
 
     Private Sub btnReduce_Click(sender As Object, e As EventArgs) Handles btnReduce.Click
 
-        Dim ofd As New OpenFileDialog
-        ofd.Multiselect = False
-        ofd.Filter = "Text (*.txt)|*.txt|All files (*.*)|*.*"
+        Using ofd As New OpenFileDialog
+            ofd.Multiselect = False
+            ofd.Filter = "Text (*.txt)|*.txt|All files (*.*)|*.*"
 
-        Dim dr As DialogResult = ofd.ShowDialog()
+            Dim dr As DialogResult = ofd.ShowDialog()
 
-        If dr = DialogResult.OK Then
-            Dim l As New Lithium
-            l.InitialiseReplay(ofd.FileName)
-            t = New Thread(AddressOf l.Mimimize)
-            t.Start()
-        End If
+            If dr = DialogResult.OK Then
+                Dim l As New Lithium
+                l.InitialiseReplay(ofd.FileName)
+                t = New Thread(AddressOf l.Mimimize)
+                t.Start()
+            End If
+        End Using
+
     End Sub
 
 End Class

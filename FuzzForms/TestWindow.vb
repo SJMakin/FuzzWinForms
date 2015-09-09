@@ -220,7 +220,7 @@ Public Class TestWindow
 
             Using p As New Process
 
-                StartProcess(p, testSteps(0).Replace("STARTING TARGET:", ""))
+                StartProcess(p, testSteps(0).Replace("STARTING TARGET:", String.Empty))
 
                 Thread.Sleep(CInt(startTimeOut / 2))
 
@@ -241,7 +241,7 @@ Public Class TestWindow
                 'winHelper.SetWindowPosition(hWnd, rct)
 
                 'Set Mouse as per replay.
-                Dim mousepos As String = testSteps(3).Replace("START MOUSE POSITION: ", "")
+                Dim mousepos As String = testSteps(3).Replace("START MOUSE POSITION: ", String.Empty)
                 Dim x As String = New String(mousepos.Split(",".ToCharArray)(0).Where(Function(c As Char) [Char].IsDigit(c)).ToArray())
                 Dim y As String = New String(mousepos.Split(",".ToCharArray)(1).Where(Function(c As Char) [Char].IsDigit(c)).ToArray())
                 Dim startmousepostion As Point = New Point(Integer.Parse(x), Integer.Parse(y))
@@ -269,9 +269,6 @@ Public Class TestWindow
 
             RunActions(postTestActions)
 
-            Using sr As New StreamWriter("C:\temp\FUZZ\replaylog.txt")
-                sr.Write(replayLog)
-            End Using
         Catch ex As Exception
             MsgBox(ex.ToString)
         Finally
@@ -424,7 +421,8 @@ Public Class TestWindow
 
         'Process stopped?!
         Try
-            Dim p As Process = Process.GetProcessById(pID)
+            Using p As Process = Process.GetProcessById(pID)
+            End Using
         Catch ex As ArgumentException
             replayLog += "Process exit"
             exitCode = TestWindowExitCode.ProcessExit
@@ -439,7 +437,7 @@ Public Class TestWindow
 
         'We have opened a new sub window or have strayed of our target
         If currentWindow <> currentHwnd Then
-            If winHelper.windowIsRelated(currentWindow, hWnd, pID) OrElse currentWindow = hWnd Then
+            If winHelper.windowIsRelated(currentWindow, hWnd) OrElse currentWindow = hWnd Then
                 currentHwnd = currentWindow
             Else
                 exitCode = TestWindowExitCode.StrayOffScreen
