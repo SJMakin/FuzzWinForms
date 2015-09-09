@@ -51,7 +51,6 @@ Public Class TestWindow
 
     Public Property keyboardModifierPercent As Integer = 10
 
-
     'Locals
     Private winHelper As New WindowHelper
     Private windowSize As WindowHelper.RECT
@@ -69,12 +68,10 @@ Public Class TestWindow
 
     Private NaughtyStrings As New List(Of String)
 
-
     'methods
 
     Public Sub New()
         evtApp.EnableRaisingEvents = True
-
 
         Dim AllNaughtyStrings As String = My.Resources.NaughtyStrings
         NaughtyStrings = AllNaughtyStrings.Split(vbNewLine.ToCharArray, StringSplitOptions.RemoveEmptyEntries).ToList
@@ -182,7 +179,7 @@ Public Class TestWindow
 
                 StartProcess(p, targetFileName)
 
-                ' 
+                '
                 'pID = winHelper.hWnd2pID(hWnd).ToInt32
                 Thread.Sleep(startTimeOut)
 
@@ -193,7 +190,6 @@ Public Class TestWindow
                 Dim currentMousePos As Point = winHelper.GetCursor
                 replayLog += "START MOUSE POSITION: " & currentMousePos.ToString & vbNewLine
                 currentHwnd = hWnd
-
 
                 While Not ProblemsFound()
                     iteration += 1
@@ -232,7 +228,6 @@ Public Class TestWindow
                 ' winHelper.SetWindowActive(hWnd)
 
                 currentHwnd = hWnd
-
 
                 'Need to move to config
                 'Set Window as per replay.
@@ -283,7 +278,6 @@ Public Class TestWindow
         Finally
             RaiseEvent ReplayComplete()
         End Try
-
 
     End Sub
 
@@ -351,7 +345,6 @@ Public Class TestWindow
 
     Sub sendRandomInput()
         Dim r As Integer = newRandomNumber(1, 100)
-
 
         If rMouseMove > r Then
             Dim x As Integer = newRandomNumber(windowSize.Left + windowEdges, windowSize.Right - windowEdges)

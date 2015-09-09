@@ -22,7 +22,7 @@ Public Class WindowHelper 'Expose and exploit the user32 library
     Private Declare Function GetClassName Lib "user32" Alias "GetClassNameA" (ByVal hwnd As IntPtr, ByVal lpClassName As String, ByVal nMaxCount As Long) As Long
     Private Declare Auto Function SetCursorPos Lib "User32.dll" (ByVal X As Integer, ByVal Y As Integer) As Long
     Private Declare Auto Function GetCursorPos Lib "User32.dll" (ByRef lpPoint As Point) As Long
-    Private Declare Function mouse_event Lib "user32" Alias "mouse_event" (ByVal dwFlags As Int32, ByVal dX As Int32, ByVal dY As Int32, ByVal cButtons As Int32, ByVal dwExtraInfo As Int32) As Boolean
+    Private Declare Function mouse_event Lib "user32" (ByVal dwFlags As Int32, ByVal dX As Int32, ByVal dY As Int32, ByVal cButtons As Int32, ByVal dwExtraInfo As Int32) As Boolean
     Private Declare Function SendInput Lib "user32" (ByVal nInputs As Integer, ByVal pInputs() As INPUT, ByVal cbSize As Integer) As Integer
     Private Declare Function AttachThreadInput Lib "user32" (ByVal idAttach As IntPtr, ByVal idAttachTo As IntPtr, ByVal fAttach As Boolean) As Boolean
     Private Declare Function GetWindowThreadProcessId Lib "user32" (ByVal hWnd As IntPtr, ByRef lpwdProcessId As Integer) As IntPtr
@@ -439,16 +439,19 @@ Public Class WindowHelper 'Expose and exploit the user32 library
         Dim Input As String = String.Empty
 
         Dim charsToEscape() As Char = "{}+^%~()[]"
+        Dim builder As New Text.StringBuilder()
+        builder.Append(Input)
 
         'Escape SendInput
         'As desribed https://msdn.microsoft.com/en-us/library/system.windows.forms.sendkeys%28v=vs.110%29.aspx
         For Each c As Char In text
             If charsToEscape.Contains(c) Then
-                Input += "{" & c & "}"
+                builder.Append("{" & c & "}")
             Else
-                Input += c
+                builder.Append(c)
             End If
         Next
+        Input = builder.ToString()
 
         SendKeys.SendWait(Input)
     End Sub
@@ -466,10 +469,7 @@ Public Class WindowHelper 'Expose and exploit the user32 library
             idletime = Environment.TickCount - lastInputInf.dwTime
         End If
 
-        If idletime > 0 Then
-            Return idletime
-        Else : Return 0
-        End If
+        Return If(idletime > 0, idletime, 0)
 
     End Function
 
@@ -587,17 +587,13 @@ Public Class WindowHelper 'Expose and exploit the user32 library
     Public Function SetWindowActive(ByVal hWnd As IntPtr, ByVal Maximised As Boolean) As Boolean
         Dim Failed As Boolean
 
-        Dim windowMode As Integer = IIf(Maximised, SW_SHOWMAXIMIZED, SW_SHOWNORMAL)
+        Dim windowMode As Integer = If(Maximised, SW_SHOWMAXIMIZED, SW_SHOWNORMAL)
 
         If ShowWindow(hWnd, windowMode) = False Then
             Failed = True
         End If
 
-        If SetForegroundWindow(hWnd) = False Then
-            Failed = True
-        Else
-            Failed = False
-        End If
+        Failed = If(SetForegroundWindow(hWnd) = False, True, False)
 
         Return Failed
     End Function

@@ -121,7 +121,6 @@ Public Class MainWindow
 
         Using sr As New StreamReader(filename)
             allTestSteps = sr.ReadToEnd
-            sr.Close()
         End Using
 
         Dim testSteps() As String = allTestSteps.Split(vbNewLine.ToCharArray, StringSplitOptions.RemoveEmptyEntries)
