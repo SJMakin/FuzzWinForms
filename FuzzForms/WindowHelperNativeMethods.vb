@@ -435,13 +435,13 @@ Public Class WindowHelperNativeMethods 'Expose and exploit the user32 library
         Dim width, height As Integer
         width = rect.Right - rect.Left
         height = rect.Bottom - rect.Top
-        SetWindowPos(hWnd, SpecialWindowHandles.HWND_TOP, rect.Left, rect.Top, width, height, SetWindowPosFlags.SWP_SHOWWINDOW)
+        SetWindowPos(hWnd, New IntPtr(SpecialWindowHandles.HWND_TOP), rect.Left, rect.Top, width, height, SetWindowPosFlags.SWP_SHOWWINDOW)
     End Sub
 
     Public Sub SendKey(ByVal text As String)
         Dim Input As String = String.Empty
 
-        Dim charsToEscape() As Char = "{}+^%~()[]"
+        Dim charsToEscape() As Char = "{}+^%~()[]".ToCharArray
         Dim builder As New Text.StringBuilder()
         builder.Append(Input)
 
@@ -476,7 +476,7 @@ Public Class WindowHelperNativeMethods 'Expose and exploit the user32 library
 
     End Function
 
-    Public Sub SendKey(ByVal bKey As Short, ByVal modifier As Short)
+    Public Sub SendKey(ByVal bKey As UShort, ByVal modifier As UShort)
         Dim GInput(3) As INPUT
 
         ' press the key
@@ -502,7 +502,7 @@ Public Class WindowHelperNativeMethods 'Expose and exploit the user32 library
         SendInput(4, GInput, Marshal.SizeOf(GetType(INPUT)))
     End Sub
 
-    Public Sub SendKey(ByVal bKey As Short)
+    Public Sub SendKey(ByVal bKey As UShort)
         Dim GInput(1) As INPUT
 
         ' press the key
@@ -563,24 +563,24 @@ Public Class WindowHelperNativeMethods 'Expose and exploit the user32 library
 
     ' simulate clicks
     Public Sub ClickLeft()
-        mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
-        mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
+        mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, UIntPtr.Zero)
+        mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, UIntPtr.Zero)
     End Sub
 
     Public Sub ClickRight()
-        mouse_event(MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, 0)
-        mouse_event(MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0)
+        mouse_event(MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, UIntPtr.Zero)
+        mouse_event(MOUSEEVENTF_RIGHTUP, 0, 0, 0, UIntPtr.Zero)
     End Sub
 
     Public Sub ClickMiddle()
-        mouse_event(MOUSEEVENTF_MIDDLEDOWN, 0, 0, 0, 0)
-        mouse_event(MOUSEEVENTF_MIDDLEUP, 0, 0, 0, 0)
+        mouse_event(MOUSEEVENTF_MIDDLEDOWN, 0, 0, 0, UIntPtr.Zero)
+        mouse_event(MOUSEEVENTF_MIDDLEUP, 0, 0, 0, UIntPtr.Zero)
     End Sub
 
     Public Sub ClickAndDrag(ByVal X As Int32, ByVal y As Int32)
-        mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
+        mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, UIntPtr.Zero)
         SetCursorPos(X, y) ' Where X and Y are in pixel
-        mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
+        mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, UIntPtr.Zero)
     End Sub
 
     'Change the active window
@@ -612,7 +612,7 @@ Public Class WindowHelperNativeMethods 'Expose and exploit the user32 library
         searchPid = PID
         searchPidHandle = IntPtr.Zero
 
-        EnumWindows(AddressOf fEnumWindowsCallBack, 0)
+        EnumWindows(AddressOf fEnumWindowsCallBack, UIntPtr.Zero)
 
         Return searchPidHandle
     End Function
@@ -632,8 +632,8 @@ Public Class WindowHelperNativeMethods 'Expose and exploit the user32 library
         ' have an owner and are App windows
 
         If IsWindowVisible(hWnd) Then
-            If GetParent(hWnd) = 0 Then
-                bNoOwner = (GetWindow(hWnd, GW_OWNER) = 0)
+            If GetParent(hWnd) = IntPtr.Zero Then
+                bNoOwner = (GetWindow(hWnd, GW_OWNER) = IntPtr.Zero)
                 lExStyle = GetWindowInteger(hWnd, GWL_EXSTYLE)
 
                 If (((lExStyle And WS_EX_TOOLWINDOW) = 0) And bNoOwner) Or ((lExStyle And WS_EX_APPWINDOW) And Not bNoOwner) Then

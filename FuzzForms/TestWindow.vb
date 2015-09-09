@@ -1,6 +1,5 @@
 ﻿Option Strict On
 
-Imports System.Reflection
 Imports System.Xml.Serialization
 Imports System.Threading
 Imports System.IO
@@ -62,9 +61,9 @@ Public Class TestWindow
     Private Shared rN As New Random
     Private WithEvents evtApp As New EventLog("Application")
 
-    Private ActionKeys() As Short = {CShort(WindowHelperNativeMethods.VirtualKeys.VK_TAB), CShort(WindowHelperNativeMethods.VirtualKeys.VK_ESCAPE), CShort(WindowHelperNativeMethods.VirtualKeys.VK_RETURN)}
-    Private FunctionKeys() As Short = {CShort(WindowHelperNativeMethods.VirtualKeys.VK_F1), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F2), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F3), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F4), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F5), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F6), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F7), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F8), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F9), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F10), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F11), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F12)}
-    Private ModifierKeys() As Short = {CShort(WindowHelperNativeMethods.VirtualKeys.VK_CONTROL), CShort(WindowHelperNativeMethods.VirtualKeys.VK_SHIFT), CShort(WindowHelperNativeMethods.VirtualKeys.VK_MENU)}
+    Private ActionKeys() As UShort = {CShort(WindowHelperNativeMethods.VirtualKeys.VK_TAB), CShort(WindowHelperNativeMethods.VirtualKeys.VK_ESCAPE), CShort(WindowHelperNativeMethods.VirtualKeys.VK_RETURN)}
+    Private FunctionKeys() As UShort = {CShort(WindowHelperNativeMethods.VirtualKeys.VK_F1), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F2), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F3), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F4), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F5), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F6), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F7), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F8), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F9), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F10), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F11), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F12)}
+    Private ModifierKeys() As UShort = {CShort(WindowHelperNativeMethods.VirtualKeys.VK_CONTROL), CShort(WindowHelperNativeMethods.VirtualKeys.VK_SHIFT), CShort(WindowHelperNativeMethods.VirtualKeys.VK_MENU)}
 
     Private NaughtyStrings As New List(Of String)
 
@@ -302,9 +301,9 @@ Public Class TestWindow
                 winHelper.ClickAndDrag(x, y)
             ElseIf input.StartsWith("SEND") Then
                 Dim splitInput() As String = input.Split(" ".ToCharArray)
-                Dim sAscii As Short = Short.Parse(splitInput(1))
-                Dim m As Short = 0
-                If splitInput.Length = 3 AndAlso Short.TryParse(splitInput(2), m) Then
+                Dim sAscii As UShort = UShort.Parse(splitInput(1))
+                Dim m As UShort = 0
+                If splitInput.Length = 3 AndAlso UShort.TryParse(splitInput(2), m) Then
                     winHelper.SendKey(sAscii, m)
                 Else
                     winHelper.SendKey(sAscii)
@@ -385,9 +384,9 @@ Public Class TestWindow
         ElseIf rKeyBoardSpam > r Then
             'Key codes:
             'https://msdn.microsoft.com/en-us/library/dd375731%28VS.85%29.aspx
-            Dim randomAscii As Short = CShort(newRandomNumber(32, 82))
+            Dim randomAscii As UShort = CUShort(newRandomNumber(32, 82))
             If newRandomNumber(1, 100) < keyboardModifierPercent Then
-                Dim modifier As Short = ModifierKeys(newRandomNumber(1, ModifierKeys.Length))
+                Dim modifier As UShort = ModifierKeys(newRandomNumber(1, ModifierKeys.Length))
                 winHelper.SendKey(randomAscii, modifier)
                 replayLog += "SENDKEY " & randomAscii & " " & modifier & " " & vbNewLine
             Else
