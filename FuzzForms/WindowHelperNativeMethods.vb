@@ -2,33 +2,27 @@
 
 Imports System.Runtime.InteropServices
 
-Public Class WindowHelper 'Expose and exploit the user32 library
-    Private Declare Function EnumWindows Lib "user32" (ByVal lpEnumFunc As CallBack, ByVal lParam As Integer) As Integer
+Public Class WindowHelperNativeMethods 'Expose and exploit the user32 library
+    Private Declare Function EnumWindows Lib "user32" (ByVal lpEnumFunc As CallBack, ByVal lParam As UIntPtr) As UInteger
     Private Declare Function GetForegroundWindow Lib "user32" () As IntPtr
     Private Declare Function GetAncestor Lib "user32" (ByVal hWnd As IntPtr, ByVal flags As Integer) As IntPtr
     Private Declare Function GetParent Lib "user32" (ByVal hwnd As IntPtr) As IntPtr
-    Private Declare Function GetWindow Lib "user32" (ByVal hwnd As IntPtr, ByVal wCmd As Integer) As Integer
+    Private Declare Function GetWindow Lib "user32" (ByVal hwnd As IntPtr, ByVal wCmd As UInt32) As IntPtr
     Private Declare Function GetWindowInteger Lib "user32" Alias "GetWindowLongA" (ByVal hwnd As IntPtr, ByVal nIndex As Integer) As Integer
     Private Declare Function GetWindowText Lib "user32" Alias "GetWindowTextA" (ByVal hwnd As IntPtr, ByVal lpString As String, ByVal cch As Integer) As Integer
-    Private Declare Function IsIconic Lib "user32" (ByVal hwnd As IntPtr) As Integer
     Private Declare Function IsWindowVisible Lib "user32" (ByVal hwnd As IntPtr) As Boolean
-    'Declare Function GetWindowRect Lib "user32.dll" (ByVal hWnd As Long, ByVal prmtypRECT As RECT) As Long
     Private Declare Function GetWindowRect Lib "user32.dll" (ByVal hwnd As IntPtr, ByRef lpRect As RECT) As Int32
     Private Declare Function ShowWindow Lib "user32" (ByVal hwnd As IntPtr, ByVal showCommand As Integer) As Boolean
     Private Declare Function SetForegroundWindow Lib "user32" (ByVal hWnd As IntPtr) As Boolean
-    Private Declare Function SendMessage Lib "user32" Alias "SendMessageA" (ByVal hWnd As IntPtr, ByVal Msg As Int32, ByVal wParam As Int32, ByRef lParam As String) As IntPtr
-    Private Declare Function SendMessage Lib "user32" Alias "SendMessageA" (ByVal hwnd As IntPtr, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As IntPtr) As Long
-    Private Declare Function GetWindow Lib "user32" (ByVal hwnd As IntPtr, ByVal wCmd As Long) As Long
     Private Declare Function GetClassName Lib "user32" Alias "GetClassNameA" (ByVal hwnd As IntPtr, ByVal lpClassName As String, ByVal nMaxCount As Long) As Long
     Private Declare Auto Function SetCursorPos Lib "User32.dll" (ByVal X As Integer, ByVal Y As Integer) As Long
     Private Declare Auto Function GetCursorPos Lib "User32.dll" (ByRef lpPoint As Point) As Long
-    Private Declare Function mouse_event Lib "user32" (ByVal dwFlags As Int32, ByVal dX As Int32, ByVal dY As Int32, ByVal cButtons As Int32, ByVal dwExtraInfo As Int32) As Boolean
+    Private Declare Function mouse_event Lib "user32" (ByVal dwFlags As Int32, ByVal dX As Int32, ByVal dY As Int32, ByVal cButtons As Int32, ByVal dwExtraInfo As UIntPtr) As Boolean
     Private Declare Function SendInput Lib "user32" (ByVal nInputs As Integer, ByVal pInputs() As INPUT, ByVal cbSize As Integer) As Integer
     Private Declare Function AttachThreadInput Lib "user32" (ByVal idAttach As IntPtr, ByVal idAttachTo As IntPtr, ByVal fAttach As Boolean) As Boolean
-    Private Declare Function GetWindowThreadProcessId Lib "user32" (ByVal hWnd As IntPtr, ByRef lpwdProcessId As Integer) As IntPtr
+    Private Declare Function GetWindowThreadProcessId Lib "user32" (ByVal hWnd As IntPtr, ByRef lpwdProcessId As Integer) As Integer
     Private Declare Function SetWindowPos Lib "user32.dll" (ByVal hWnd As IntPtr, ByVal hWndInsertAfter As IntPtr, ByVal X As Integer, ByVal Y As Integer, ByVal cx As Integer, ByVal cy As Integer, ByVal uFlags As SetWindowPosFlags) As Boolean
     Private Declare Function GetLastInputInfo Lib "user32.dll" (ByRef plii As LASTINPUTINFO) As Boolean
-    Private Declare Function GetCurrentThreadId Lib "kernel32" () As IntPtr
 
     Public Delegate Function CallBack(ByVal hwnd As IntPtr, ByVal lParam As Integer) As Boolean
 
@@ -223,7 +217,7 @@ Public Class WindowHelper 'Expose and exploit the user32 library
         VK_OEM_NEC_EQUAL = &H92     ' // [NEC_Equal] = 146    ' NEC PC-9800 kbd definitions "=" key on numpad
         VK_OEM_FJ_JISHO = &H92      ' // [Fujitsu_Masshou] = 146    ' Fujitsu/OASYS kbd definitions "Dictionary" key
         VK_OEM_FJ_MASSHOU = &H93    ' // [Fujitsu_Masshou] = 147    ' Fujitsu/OASYS kbd definitions "Unregister word" key
-        VK_OEM_FJ_TOUROKU = &H94    ' // [Fujitsu_Touroku] = 148    ' Fujitsu/OASYS kbd definitions "Register word" key  
+        VK_OEM_FJ_TOUROKU = &H94    ' // [Fujitsu_Touroku] = 148    ' Fujitsu/OASYS kbd definitions "Register word" key
         VK_OEM_FJ_LOYA = &H95       ' // [Fujitsu_Loya] = 149    ' Fujitsu/OASYS kbd definitions "Left OYAYUBI" key
         VK_OEM_FJ_ROYA = &H96       ' // [Fujitsu_Roya] = 150    ' Fujitsu/OASYS kbd definitions "Right OYAYUBI" key
 
@@ -362,18 +356,17 @@ Public Class WindowHelper 'Expose and exploit the user32 library
 
     Const GA_PARENT = 1 'Retrieves the parent window. This does not include the owner, as it does with the GetParent function.
     Const GA_ROOT = 2 'Retrieves the root window by walking the chain of parent windows.
-    Const GA_ROOTOWNER = 3 'Retrieves the owned root window by walking the chain of parent and owner windows returned by GetParent. 
+    Const GA_ROOTOWNER = 3 'Retrieves the owned root window by walking the chain of parent and owner windows returned by GetParent.
 
     Const SW_SHOWNORMAL = 1
     Const SW_SHOWMAXIMIZED = 3
 
     Const WM_SETTEXT = 12
 
-
 #End Region
 
 #Region "Structures"
-    <StructLayout(LayoutKind.Sequential)> _
+    <StructLayout(LayoutKind.Sequential)>
     Public Structure RECT
         Public Left As Int32
         Public Top As Int32
@@ -387,39 +380,49 @@ Public Class WindowHelper 'Expose and exploit the user32 library
         <MarshalAs(UnmanagedType.U4)>
         Public dwTime As Integer
     End Structure
-    Private Structure MOUSEINPUT
+
+    <StructLayout(LayoutKind.Sequential)>
+    Structure MOUSEINPUT
         Public dx As Integer
         Public dy As Integer
-        Public mouseData As Integer
-        Public dwFlags As Integer
-        Public time As Integer
-        Public dwExtraInfo As IntPtr
+        Public mouseData As UInteger
+        Public dwFlags As UInteger
+        Public time As UInteger
+        Private dwExtraInfo As IntPtr
     End Structure
 
-    Private Structure KEYBDINPUT
-        Public wVk As Short
-        Public wScan As Short
-        Public dwFlags As Integer
-        Public time As Integer
-        Public dwExtraInfo As IntPtr
+    <StructLayout(LayoutKind.Sequential)>
+    Structure KEYBDINPUT
+        Public wVk As UShort
+        Public wScan As UShort
+        Public dwFlags As UInteger
+        Public time As UInteger
+        Private dwExtraInfo As IntPtr
     End Structure
 
-    Private Structure HARDWAREINPUT
+    <StructLayout(LayoutKind.Sequential)>
+    Structure HARDWAREINPUT
         Public uMsg As Integer
         Public wParamL As Short
         Public wParamH As Short
     End Structure
 
-    <StructLayout(LayoutKind.Explicit)> _
-    Private Structure INPUT
-        <FieldOffset(0)> _
-        Public type As Integer
-        <FieldOffset(4)> _
+    <StructLayout(LayoutKind.Explicit)>
+    Structure MouseKeybdHardwareInputUnion
+        <FieldOffset(0)>
         Public mi As MOUSEINPUT
-        <FieldOffset(4)> _
+
+        <FieldOffset(0)>
         Public ki As KEYBDINPUT
-        <FieldOffset(4)> _
+
+        <FieldOffset(0)>
         Public hi As HARDWAREINPUT
+    End Structure
+
+    <StructLayout(LayoutKind.Sequential)>
+    Structure INPUT
+        Public type As UInteger
+        Public mkhi As MouseKeybdHardwareInputUnion
     End Structure
 
 #End Region
@@ -478,23 +481,23 @@ Public Class WindowHelper 'Expose and exploit the user32 library
 
         ' press the key
         GInput(0).type = INPUT_KEYBOARD
-        GInput(0).ki.wVk = modifier
-        GInput(0).ki.dwFlags = 0
+        GInput(0).mkhi.ki.wVk = modifier
+        GInput(0).mkhi.ki.dwFlags = 0
         ' press the key
 
         GInput(1).type = INPUT_KEYBOARD
-        GInput(1).ki.wVk = bKey
-        GInput(1).ki.dwFlags = 0
+        GInput(1).mkhi.ki.wVk = bKey
+        GInput(1).mkhi.ki.dwFlags = 0
 
         ' release the key
         GInput(2).type = INPUT_KEYBOARD
-        GInput(2).ki.wVk = bKey
-        GInput(2).ki.dwFlags = KEYEVENTF_KEYUP
+        GInput(2).mkhi.ki.wVk = bKey
+        GInput(2).mkhi.ki.dwFlags = KEYEVENTF_KEYUP
 
         ' release the key
         GInput(3).type = INPUT_KEYBOARD
-        GInput(3).ki.wVk = modifier
-        GInput(3).ki.dwFlags = KEYEVENTF_KEYUP
+        GInput(3).mkhi.ki.wVk = modifier
+        GInput(3).mkhi.ki.dwFlags = KEYEVENTF_KEYUP
 
         SendInput(4, GInput, Marshal.SizeOf(GetType(INPUT)))
     End Sub
@@ -504,13 +507,13 @@ Public Class WindowHelper 'Expose and exploit the user32 library
 
         ' press the key
         GInput(0).type = INPUT_KEYBOARD
-        GInput(0).ki.wVk = bKey
-        GInput(0).ki.dwFlags = 0
+        GInput(0).mkhi.ki.wVk = bKey
+        GInput(0).mkhi.ki.dwFlags = 0
 
         ' release the key
         GInput(1).type = INPUT_KEYBOARD
-        GInput(1).ki.wVk = bKey
-        GInput(1).ki.dwFlags = KEYEVENTF_KEYUP
+        GInput(1).mkhi.ki.wVk = bKey
+        GInput(1).mkhi.ki.dwFlags = KEYEVENTF_KEYUP
 
         SendInput(2, GInput, Marshal.SizeOf(GetType(INPUT)))
 
@@ -521,7 +524,6 @@ Public Class WindowHelper 'Expose and exploit the user32 library
         GetWindowThreadProcessId(hWnd, result)
         Return result
     End Function
-
 
     Public Function windowIsRelated(ByVal Child As IntPtr, ByVal Parent As IntPtr, ByVal pID As Integer) As Boolean
         If GetAncestor(Child, GA_PARENT) = Parent Then Return True
@@ -548,8 +550,6 @@ Public Class WindowHelper 'Expose and exploit the user32 library
         Return GetForegroundWindow
     End Function
 
-
-
     'Mouse Stuff
     Public Sub SetCusor(ByVal X As Int32, ByVal y As Int32)
         SetCursorPos(X, y) ' Where X and Y are in pixel
@@ -561,7 +561,7 @@ Public Class WindowHelper 'Expose and exploit the user32 library
         Return tempPos
     End Function
 
-    ' semulate clicks
+    ' simulate clicks
     Public Sub ClickLeft()
         mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
         mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
@@ -656,6 +656,5 @@ Public Class WindowHelper 'Expose and exploit the user32 library
     End Function
 
 #End Region
-
 
 End Class

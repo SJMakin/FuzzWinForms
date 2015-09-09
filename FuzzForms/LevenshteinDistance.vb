@@ -20,7 +20,6 @@
         Dim a As Integer = 0
         While a <= n
 
-
             d(a, 0) = System.Math.Max(System.Threading.Interlocked.Increment(a), a - 1)
         End While
         Dim b As Integer = 1
@@ -39,6 +38,5 @@
         Next
         Return d(n, m)
     End Function
-
 
 End Class

@@ -52,8 +52,8 @@ Public Class TestWindow
     Public Property keyboardModifierPercent As Integer = 10
 
     'Locals
-    Private winHelper As New WindowHelper
-    Private windowSize As WindowHelper.RECT
+    Private winHelper As New WindowHelperNativeMethods
+    Private windowSize As WindowHelperNativeMethods.RECT
     Private hWnd As New IntPtr
     Private currentHwnd As New IntPtr
     Private CurrentWindowText As String = String.Empty
@@ -62,9 +62,9 @@ Public Class TestWindow
     Private Shared rN As New Random
     Private WithEvents evtApp As New EventLog("Application")
 
-    Private ActionKeys() As Short = {CShort(WindowHelper.VirtualKeys.VK_TAB), CShort(WindowHelper.VirtualKeys.VK_ESCAPE), CShort(WindowHelper.VirtualKeys.VK_RETURN)}
-    Private FunctionKeys() As Short = {CShort(WindowHelper.VirtualKeys.VK_F1), CShort(WindowHelper.VirtualKeys.VK_F2), CShort(WindowHelper.VirtualKeys.VK_F3), CShort(WindowHelper.VirtualKeys.VK_F4), CShort(WindowHelper.VirtualKeys.VK_F5), CShort(WindowHelper.VirtualKeys.VK_F6), CShort(WindowHelper.VirtualKeys.VK_F7), CShort(WindowHelper.VirtualKeys.VK_F8), CShort(WindowHelper.VirtualKeys.VK_F9), CShort(WindowHelper.VirtualKeys.VK_F10), CShort(WindowHelper.VirtualKeys.VK_F11), CShort(WindowHelper.VirtualKeys.VK_F12)}
-    Private ModifierKeys() As Short = {CShort(WindowHelper.VirtualKeys.VK_CONTROL), CShort(WindowHelper.VirtualKeys.VK_SHIFT), CShort(WindowHelper.VirtualKeys.VK_MENU)}
+    Private ActionKeys() As Short = {CShort(WindowHelperNativeMethods.VirtualKeys.VK_TAB), CShort(WindowHelperNativeMethods.VirtualKeys.VK_ESCAPE), CShort(WindowHelperNativeMethods.VirtualKeys.VK_RETURN)}
+    Private FunctionKeys() As Short = {CShort(WindowHelperNativeMethods.VirtualKeys.VK_F1), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F2), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F3), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F4), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F5), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F6), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F7), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F8), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F9), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F10), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F11), CShort(WindowHelperNativeMethods.VirtualKeys.VK_F12)}
+    Private ModifierKeys() As Short = {CShort(WindowHelperNativeMethods.VirtualKeys.VK_CONTROL), CShort(WindowHelperNativeMethods.VirtualKeys.VK_SHIFT), CShort(WindowHelperNativeMethods.VirtualKeys.VK_MENU)}
 
     Private NaughtyStrings As New List(Of String)
 
@@ -141,8 +141,8 @@ Public Class TestWindow
         Return rN.Next(minValue, maxValue)
     End Function
 
-    Public Event TestComplete()
-    Public Event ReplayComplete()
+    Public Event TestComplete As EventHandler
+    Public Event ReplayComplete As EventHandler
 
     Private Function StartProcess(ByRef p As Process, ByVal filename As String) As IntPtr
         Dim pStartInfo As New ProcessStartInfo
@@ -159,11 +159,11 @@ Public Class TestWindow
 
         pID = p.Id
 
-        While WindowHelper.GetHandleByProcessID(pID) = IntPtr.Zero
+        While WindowHelperNativeMethods.GetHandleByProcessID(pID) = IntPtr.Zero
             Thread.Sleep(10)
         End While
 
-        hWnd = WindowHelper.GetHandleByProcessID(pID)
+        hWnd = WindowHelperNativeMethods.GetHandleByProcessID(pID)
 
         winHelper.SetWindowActive(hWnd, True)
 
@@ -209,7 +209,7 @@ Public Class TestWindow
                 exitCode = TestWindowExitCode.FatalError
             End If
         Finally
-            RaiseEvent TestComplete()
+            RaiseEvent TestComplete(Me, New EventArgs())
         End Try
     End Sub
 
@@ -276,7 +276,7 @@ Public Class TestWindow
         Catch ex As Exception
             MsgBox(ex.ToString)
         Finally
-            RaiseEvent ReplayComplete()
+            RaiseEvent ReplayComplete(Me, New EventArgs())
         End Try
 
     End Sub
@@ -332,7 +332,7 @@ Public Class TestWindow
 
     End Function
 
-    Private Function MouseIsInActiveWindow(ByVal MousePosition As Point, ByVal WindowSize As WindowHelper.RECT) As Boolean
+    Private Function MouseIsInActiveWindow(ByVal MousePosition As Point, ByVal WindowSize As WindowHelperNativeMethods.RECT) As Boolean
         If MousePosition.X > WindowSize.Left AndAlso MousePosition.X < WindowSize.Right Then
             If MousePosition.Y > WindowSize.Top AndAlso MousePosition.X < WindowSize.Bottom Then
                 Return True

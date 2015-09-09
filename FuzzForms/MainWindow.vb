@@ -5,11 +5,10 @@ Imports System.IO
 Imports System.Xml.Serialization
 
 Public Class MainWindow
-    Dim winHelper As New WindowHelper
+    Dim winHelper As New WindowHelperNativeMethods
     Dim tw As New TestWindow
     Dim t As New Thread(AddressOf tw.StartTest)
     Dim InterestingError As String
-
 
     Public Sub New()
         InitializeComponent()
@@ -32,18 +31,17 @@ Public Class MainWindow
         End If
     End Sub
 
-
-    Public Sub HandleTestComplete()
+    Public Sub HandleTestComplete(sender As Object, e As EventArgs)
         RemoveHandler tw.TestComplete, AddressOf HandleTestComplete
 
         createReport()
 
         If chkKeepGoing.Checked = True Then
-            Me.Invoke(Sub() StartTest()) 'Start the test on the UI thread 
+            Me.Invoke(Sub() StartTest()) 'Start the test on the UI thread
         End If
     End Sub
 
-    Public Sub HandleReplayComplete()
+    Public Sub HandleReplayComplete(sender As Object, e As EventArgs)
         RemoveHandler tw.ReplayComplete, AddressOf HandleReplayComplete
         Dim errorSimilarity As Integer = LevenshteinDistance.Compute(tw.eventLogs.Trim, InterestingError.Trim)
 
@@ -176,11 +174,4 @@ Public Class MainWindow
         End If
     End Sub
 
-
-
-
-
 End Class
-
-
-

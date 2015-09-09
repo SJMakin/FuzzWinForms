@@ -76,7 +76,7 @@
     <Compile Include="Lithium.vb" />
     <Compile Include="LevenshteinDistance.vb" />
     <Compile Include="TestWindow.vb" />
-    <Compile Include="WindowHelper.vb" />
+    <Compile Include="WindowHelperNativeMethods.vb" />
     <Compile Include="MainWindow.vb">
       <SubType>Form</SubType>
     </Compile>
