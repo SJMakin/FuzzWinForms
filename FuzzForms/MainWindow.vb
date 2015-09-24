@@ -123,6 +123,12 @@ Public Class MainWindow
             allTestSteps = sr.ReadToEnd
         End Using
 
+        Dim xSer As New XmlSerializer(GetType(TestWindow))
+        Using sr As New StreamReader(replaypath & "\Settings.xml")
+            tw = DirectCast(xSer.Deserialize(sr), TestWindow)
+        End Using
+
+
         Dim testSteps() As String = allTestSteps.Split(vbNewLine.ToCharArray, StringSplitOptions.RemoveEmptyEntries)
 
         tw.ResetTest()
