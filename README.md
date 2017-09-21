@@ -1,7 +1,7 @@
 # FuzzWinForms
-##Random UI Fuzzer (Monkey-Fuzzer) for finding bugs in Windows Forms
+## Random UI Fuzzer (Monkey-Fuzzer) for finding bugs in Windows Forms
 
-####Features:
+#### Features:
 
 Random input of x number of actions using User32 API
 
