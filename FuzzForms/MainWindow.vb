@@ -19,6 +19,7 @@ Public Class MainWindow
     End Sub
 
     Public Sub StartTest()
+
         Dim target As String = txtFileName.Text
         If Not String.IsNullOrWhiteSpace(target) AndAlso target.EndsWith("exe") AndAlso File.Exists(target) Then
             tw.ResetTest()
@@ -34,7 +35,10 @@ Public Class MainWindow
     Public Sub HandleTestComplete(sender As Object, e As EventArgs)
         RemoveHandler tw.TestComplete, AddressOf HandleTestComplete
 
+        Process.Start("cmd", "/c PSR.EXE /STOP")
+        Thread.Sleep(5000)
         createReport()
+
 
         If chkKeepGoing.Checked = True Then
             Me.Invoke(Sub() StartTest()) 'Start the test on the UI thread
@@ -67,12 +71,14 @@ Public Class MainWindow
             If Not String.IsNullOrEmpty(tw.eventLogs) Then
                 Using sr2 As New StreamWriter(folder & "\EventLog.txt")
                     sr2.WriteLine(tw.eventLogs & vbNewLine)
+                    File.Copy("C:\Temp\psr.zip", folder + "\psr.zip")
                 End Using
             End If
 
             If tw.exitCode = TestWindowExitCode.ProcessExit OrElse tw.exitCode = TestWindowExitCode.StrayOffScreen OrElse Not String.IsNullOrEmpty(tw.eventLogs) Then
                 Using sr3 = New StreamWriter(folder & "\ReplayLogging.txt")
                     sr3.WriteLine(tw.replayLog & vbNewLine)
+                    File.Delete("C:\Temp\psr.zip")
                 End Using
             End If
         End Using
@@ -86,6 +92,9 @@ Public Class MainWindow
         t.Abort()
         chkKeepGoing.Checked = False
         MsgBox("Test stopped")
+        Process.Start("cmd", "/c PSR.EXE /STOP")
+        Thread.Sleep(5000)
+        File.Delete("C:\Temp\psr.zip")
     End Sub
 
     Private Sub btnFindFile_Click(sender As Object, e As EventArgs) Handles btnFindFile.Click

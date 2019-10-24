@@ -49,6 +49,7 @@ Public Class TestWindow
     Public Property rKeyBoardFunctionKey As Integer = 101
 
     Public Property keyboardModifierPercent As Integer = 10
+    Public Property folder As String
 
     'Locals
     Private winHelper As New WindowHelperNativeMethods
@@ -66,6 +67,8 @@ Public Class TestWindow
     Private ModifierKeys() As UShort = {CShort(WindowHelperNativeMethods.VirtualKeys.VK_CONTROL), CShort(WindowHelperNativeMethods.VirtualKeys.VK_SHIFT), CShort(WindowHelperNativeMethods.VirtualKeys.VK_MENU)}
 
     Private NaughtyStrings As New List(Of String)
+
+    Private pr As Process
 
     'methods
 
@@ -170,9 +173,12 @@ Public Class TestWindow
 
     Public Sub StartTest()
         Try
+
             exitCode = TestWindowExitCode.NoError
 
             RunActions(preTestActions)
+
+            Process.Start("cmd", "/c PSR.EXE /START /OUTPUT ""C:\Temp\psr.zip""")
 
             Using p As New Process
 
