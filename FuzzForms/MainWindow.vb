@@ -71,7 +71,7 @@ Public Class MainWindow
             If Not String.IsNullOrEmpty(tw.eventLogs) Then
                 Using sr2 As New StreamWriter(folder & "\EventLog.txt")
                     sr2.WriteLine(tw.eventLogs & vbNewLine)
-                    File.Copy("C:\Temp\psr.zip", folder + "\psr.zip")
+                    File.Move("C:\Temp\psr.zip", folder + "\psr.zip")
                 End Using
             End If
 
